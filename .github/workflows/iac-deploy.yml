@@ -1,0 +1,53 @@
+name: IaC Deploy
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      AZURE_RG: ${{ secrets.AZURE_RG }}
+      AZURE_LOCATION: eastus
+      WEBAPP_NAME: ${{ secrets.AZURE_WEBAPP_NAME }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Validate deployment inputs
+        run: |
+          if [ -z "$AZURE_RG" ]; then
+            echo "AZURE_RG secret is required." >&2
+            exit 1
+          fi
+
+          if [ -z "$WEBAPP_NAME" ]; then
+            WEBAPP_NAME="ab300-web-${GITHUB_RUN_ID}"
+          fi
+
+          echo "AZURE_RG=$AZURE_RG" >> "$GITHUB_ENV"
+          echo "WEBAPP_NAME=$WEBAPP_NAME" >> "$GITHUB_ENV"
+
+      - name: Ensure resource group
+        run: |
+          az group create --name "$AZURE_RG" --location "$AZURE_LOCATION"
+
+      - name: Deploy Bicep (main.bicep)
+        run: |
+          az deployment group create \
+            --resource-group "$AZURE_RG" \
+            --name "ab300-deploy-${GITHUB_RUN_ID}" \
+            --template-file main.bicep \
+            --parameters webAppName="$WEBAPP_NAME"

@@ -1,0 +1,85 @@
+name: QA Deploy
+
+on:
+  workflow_run:
+    workflows: ["IaC Deploy"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  deploy-and-test:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      AZURE_RG: ${{ secrets.AZURE_RG }}
+      WEBAPP_NAME: ${{ secrets.AZURE_WEBAPP_NAME }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Validate deployment inputs
+        run: |
+          if [ -z "$AZURE_RG" ]; then
+            echo "AZURE_RG secret is required." >&2
+            exit 1
+          fi
+
+          if [ -z "$WEBAPP_NAME" ]; then
+            WEBAPP_NAME="ab300-web-${GITHUB_RUN_ID}"
+          fi
+
+          echo "AZURE_RG=$AZURE_RG" >> "$GITHUB_ENV"
+          echo "WEBAPP_NAME=$WEBAPP_NAME" >> "$GITHUB_ENV"
+
+      - name: Publish web app
+        run: |
+          dotnet restore AB300.slnx
+          dotnet publish code/AB300.Web/AB300.Web.csproj --configuration Release --output ./publish --no-restore
+
+      - name: Zip artifact
+        run: |
+          cd publish
+          zip -r ../deploy.zip .
+
+      - name: Deploy to App Service (zip)
+        run: |
+          az webapp deployment source config-zip \
+            --resource-group "$AZURE_RG" \
+            --name "$WEBAPP_NAME" \
+            --src deploy.zip
+
+      - name: Wait for app to start
+        run: |
+          for i in {1..30}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://$WEBAPP_NAME.azurewebsites.net/" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "App is responding"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "App did not respond in time" && exit 1
+
+      - name: Run smoke tests
+        run: |
+          curl -fS "https://$WEBAPP_NAME.azurewebsites.net/" || exit 1
+
+      - name: Acceptance tests placeholder
+        run: |
+          echo "Add your integration or acceptance tests here."

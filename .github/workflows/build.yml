@@ -1,0 +1,50 @@
+name: Build
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/packages.lock.json
+
+      - name: Restore dependencies
+        run: dotnet restore AB300.slnx
+
+      - name: Build solution
+        run: dotnet build AB300.slnx --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test tests/AB300.Web.Tests/AB300.Web.Tests.csproj --configuration Release --no-build --collect:"XPlat Code Coverage" --settings coverage.runsettings
+
+      - name: Publish web app
+        run: dotnet publish code/AB300.Web/AB300.Web.csproj --configuration Release --output ./publish --no-restore
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webapp-publish
+          path: ./publish
+          if-no-files-found: error
+          retention-days: 30

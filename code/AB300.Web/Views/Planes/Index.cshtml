@@ -1,0 +1,33 @@
+@model IEnumerable<AB300.Web.Models.Plane>
+
+@{
+    ViewData["Title"] = "Planes";
+}
+
+<h1>Planes</h1>
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New Plane</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Model</th>
+            <th>Capacity</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var plane in Model)
+{
+        <tr>
+            <td>@plane.Model</td>
+            <td>@plane.Capacity</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@plane.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@plane.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@plane.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
