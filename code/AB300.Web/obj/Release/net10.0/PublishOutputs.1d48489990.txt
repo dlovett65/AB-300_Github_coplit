@@ -1,7 +1,0 @@
-C:\Users\dlovett6\VSCode\Projects\AB-300_Github_coplit\publish\AB300.Web.exe
-C:\Users\dlovett6\VSCode\Projects\AB-300_Github_coplit\publish\appsettings.Development.json
-C:\Users\dlovett6\VSCode\Projects\AB-300_Github_coplit\publish\appsettings.json
-C:\Users\dlovett6\VSCode\Projects\AB-300_Github_coplit\publish\AB300.Web.dll
-C:\Users\dlovett6\VSCode\Projects\AB-300_Github_coplit\publish\AB300.Web.deps.json
-C:\Users\dlovett6\VSCode\Projects\AB-300_Github_coplit\publish\AB300.Web.runtimeconfig.json
-C:\Users\dlovett6\VSCode\Projects\AB-300_Github_coplit\publish\AB300.Web.pdb

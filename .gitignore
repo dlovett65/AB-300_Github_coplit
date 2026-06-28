@@ -1,0 +1,10 @@
+bin/
+obj/
+publish/
+.vs/
+TestResults/
+*.user
+*.suo
+*.cache
+*.log
+coverage.cobertura.xml
