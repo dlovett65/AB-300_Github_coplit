@@ -27,9 +27,6 @@ resource webApp 'Microsoft.Web/sites@2023-10-01' = {
     serverFarmId: appServicePlan.id
     httpsOnly: true
   }
-  siteConfig: {
-    alwaysOn: true
-  }
 }
 
 output webAppName string = webApp.name
