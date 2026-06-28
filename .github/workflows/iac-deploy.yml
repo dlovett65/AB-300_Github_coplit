@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AZURE_RG: ${{ secrets.AZURE_RG }}
-      AZURE_LOCATION: australiaeast
+      AZURE_LOCATION: ${{ secrets.LOCATION }}
       WEBAPP_NAME: ${{ secrets.AZURE_WEBAPP_NAME }}
     steps:
       - name: Checkout source
