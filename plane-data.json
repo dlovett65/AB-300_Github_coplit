@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Wright Flyer",
+    "year": 1903,
+    "description": "First powered airplane",
+    "rangeInKm": 39
+  },
+  {
+    "id": 2,
+    "name": "Wright Flyer II",
+    "year": 1904,
+    "description": "Improved version of the Wright Flyer",
+    "rangeInKm": 56
+  },
+  {
+    "id": 3,
+    "name": "Wright Glider",
+    "year": 1900,
+    "description": "Early glider experiment by the Wright brothers",
+    "rangeInKm": 18
+  },
+  {
+    "id": 4,
+    "name": "Wright Model A",
+    "year": 1903,
+    "description": "First commercial aircraft design",
+    "rangeInKm": 97
+  },
+  {
+    "id": 5,
+    "name": "Wright Model B",
+    "year": 1905,
+    "description": "Refined biplane for early flight demonstrations",
+    "rangeInKm": 120
+  },
+  {
+    "id": 6,
+    "name": "Wright Military Flyer",
+    "year": 1909,
+    "description": "Military-oriented experimental aircraft",
+    "rangeInKm": 160
+  },
+  {
+    "id": 7,
+    "name": "Kitty Hawk",
+    "year": 1903,
+    "description": "Name used for the Wright brothers' early flying experiments",
+    "rangeInKm": 45
+  },
+  {
+    "id": 8,
+    "name": "Langley Aerodrome",
+    "year": 1903,
+    "description": "Government-funded experimental flying machine",
+    "rangeInKm": 24
+  },
+  {
+    "id": 9,
+    "name": "Blériot XI",
+    "year": 1909,
+    "description": "Early monoplane that popularized aviation",
+    "rangeInKm": 120
+  },
+  {
+    "id": 10,
+    "name": "Antoinette IV",
+    "year": 1908,
+    "description": "Elegant early aircraft used in pioneering flights",
+    "rangeInKm": 180
+  }
+]
