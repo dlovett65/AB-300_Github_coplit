@@ -6,7 +6,7 @@ param skuTier string = 'Basic'
 param skuSize string = 'B1'
 param siteKind string = 'app'
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2023-10-01' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   name: appServicePlanName
   location: location
   sku: {
@@ -19,7 +19,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-10-01' = {
   }
 }
 
-resource webApp 'Microsoft.Web/sites@2023-10-01' = {
+resource webApp 'Microsoft.Web/sites@2023-01-01' = {
   name: webAppName
   location: location
   kind: siteKind
