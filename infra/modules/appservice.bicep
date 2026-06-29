@@ -1,6 +1,6 @@
 param webAppName string
 param appServicePlanName string
-param location string = resourceGroup().location
+param location string = 'eastus' //resourceGroup().location
 param skuName string = 'B1'
 param skuTier string = 'Basic'
 param skuSize string = 'B1'
